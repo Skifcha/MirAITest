@@ -58,17 +58,6 @@ final class MiraiService {
                 print("Updating model registry...")
                 _ = try await engine.updateRegistry()
                 print("Registry updated. Current state for \(modelId): \(String(describing: modelState))")
-                
-                print("Creating new session for \(modelId)...")
-                session = try engine.createSession(identifier: modelId)
-                let config = SessionConfig(
-                    preset: .general,
-                    samplingSeed: .default,
-                    contextLength: .default
-                )
-                try session?.load(config: config)
-                print("Session created successfully.")
-                
             } catch {
                 print("Failed to update registry: \(error.localizedDescription)")
             }
@@ -94,6 +83,18 @@ final class MiraiService {
         
         Task {
             do {
+                if session == nil {
+                    print("Creating new session for \(modelId)...")
+                    session = try engine.createSession(identifier: modelId)
+                    let config = SessionConfig(
+                        preset: .general,
+                        samplingSeed: .default,
+                        contextLength: .default
+                    )
+                    try session?.load(config: config)
+                    print("Session created successfully.")
+                }
+                
                 guard let session = session else {
                     throw NSError(domain: "MiraiService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Session could not be created."])
                 }
