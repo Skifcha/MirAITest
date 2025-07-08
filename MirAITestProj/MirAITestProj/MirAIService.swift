@@ -62,7 +62,7 @@ final class MiraiService {
                 print("Creating new session for \(modelId)...")
                 session = try engine.createSession(identifier: modelId)
                 let config = SessionConfig(
-                    preset: .summarization,
+                    preset: .general,
                     samplingSeed: .default,
                     contextLength: .default
                 )
